@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: best-effort
+  namespace: megastack-application
+  labels:
+    app: best-effort
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: best-effort
+  template:
+    metadata:
+      labels:
+        app: best-effort
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - log-aggregate
+              topologyKey: kubernetes.io/hostname 
+      containers:
+        - name: best-effort
+          image: "colinianking/stress-ng:ca4c54389728d7abe5162d93a831a72427890f83"
+          command: 
+          - "/bin/sh"
+          - "-c"
+          - "stress-ng --temp-path /tmp --vm ${MEMORY_STRESS} --vm-bytes ${MEMORY_GB}G"
+          env:
+            - name: MEMORY_STRESS
+              value: "1"
+            - name: MEMORY_GB
+              value: "5"

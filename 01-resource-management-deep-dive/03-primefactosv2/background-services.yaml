@@ -1,0 +1,136 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: guaranteed
+  namespace: hyperburst-application
+  labels:
+    app: guaranteed
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: guaranteed
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: guaranteed
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - primefactors
+              topologyKey: kubernetes.io/hostname 
+      containers:
+        - name: guaranteed
+          image: "colinianking/stress-ng:ca4c54389728d7abe5162d93a831a72427890f83"
+          command: 
+          - "/bin/sh"
+          - "-c"
+          - "stress-ng --temp-path /tmp --cpu ${CPU_CORES} --cpu-load ${CPU_PERCENT}"
+          env:
+            - name: CPU_CORES
+              value: "1"
+            - name: CPU_PERCENT
+              value: "40"
+          resources:
+            requests:
+              cpu: 3000m
+              memory: 500Mi
+            limits:
+              cpu: 3000m
+              memory: 500Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: burstable
+  namespace: hyperburst-application
+  labels:
+    app: burstable
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: burstable
+  strategy:
+      type: Recreate
+  template:
+    metadata:
+      labels:
+        app: burstable
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - primefactors
+              topologyKey: kubernetes.io/hostname 
+      containers:
+        - name: burstable
+          image: "colinianking/stress-ng:ca4c54389728d7abe5162d93a831a72427890f83"
+          command:
+          - "/bin/sh"
+          - "-c"
+          - "stress-ng --temp-path /tmp --cpu ${CPU_CORES} --cpu-load ${CPU_PERCENT}"
+          env:
+            - name: CPU_CORES
+              value: "0"
+            - name: CPU_PERCENT
+              value: "40"
+          resources:
+            requests:
+              cpu: 100m
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: best-effort
+  namespace: hyperburst-application
+  labels:
+    app: best-effort
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: best-effort
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: best-effort
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - primefactors
+              topologyKey: kubernetes.io/hostname 
+      containers:
+        - name: best-effort
+          image: "colinianking/stress-ng:ca4c54389728d7abe5162d93a831a72427890f83"
+          command: 
+          - "/bin/sh"
+          - "-c"
+          - "stress-ng --temp-path /tmp --cpu ${CPU_CORES} --cpu-load ${CPU_PERCENT}"
+          env:
+            - name: CPU_CORES
+              value: "0"
+            - name: CPU_PERCENT
+              value: "50"
