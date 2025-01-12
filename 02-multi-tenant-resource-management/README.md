@@ -1,6 +1,6 @@
 # ScaleSurfers Troubleshooting Lab
 
-Welcome to the ScaleSurfers Troubleshooting Lab! In this exercise, you will troubleshoot and fix several applications that are not able to run properly. Each application is located in its respective folder, numbered **silentrunner**, **horizonhopper**, **zerohero**, and **cloudchaser**. Your objective is to identify and resolve the issues in each application, ensuring they are running correctly. The applications should be fixed in the order of the folders.
+Welcome to the ScaleSurfers Troubleshooting Lab! In this exercise, you will troubleshoot and fix several applications that are not able to run properly. Each application is located in its respective folder **silentrunner**, **horizonhopper**, **zerohero**, and **cloudchaser**. Your objective is to identify and resolve the issues in each application, ensuring they are running correctly. The applications should be fixed in the order of the folders.
 
 ## Objective
 
@@ -31,7 +31,7 @@ Start by reviewing the contents of each folder. Each folder contains an applicat
 - **01-silentrunner**: Pods are not being created
 - **02-horizonhopper**: One of the pods in not being created
 - **03-zerohero**: The application is crashing
-- **Folder 04**: Pods are not being created
+- **04-cloudchaser**: Pods are not being created
 
 Each folder contains the `install.yaml` file to install the application. You may need to investigate deployment configurations, logs, events, or any other resources in the folder/cluster.
 
