@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: primefactors
+  namespace: hyperburst-application
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: primefactors
+  namespace: hyperburst-application
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: primefactors
+  template:
+    metadata:
+      labels:
+        app: primefactors
+    spec:
+      serviceAccountName: primefactors
+      containers:
+        - name: primefactors
+          image: quay.io/rh-ee-nmendels/rmw-prime-factors
+          imagePullPolicy: Always
+          env:
+          - name: GUNICORN_WORKERS
+            value: "3"
+          ports:
+          - name: http
+            containerPort: 8080
+          resources:
+            requests:
+              cpu: 500m
+              memory: 200Mi
+            limits:
+              cpu: 1000m
+              memory: 200Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: primefactors
+  namespace: hyperburst-application
+spec:
+  selector:
+    app: primefactors
+  ports:
+    - name: http  
+      port: 8080
+      targetPort: http
+  type: ClusterIP  
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: primefactors
+  namespace: hyperburst-application
+spec:
+  to:
+    kind: Service
+    name: primefactors
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect

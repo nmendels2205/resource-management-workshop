@@ -40,7 +40,6 @@ Before you begin, ensure the following:
 2. Familiarity with Kubernetes basics, such as Pods, Deployments, and Services.
 3. OpenShift CLI (`oc`) or Kubernetes CLI (`kubectl`) installed and configured.
    - **OpenShift CLI**: [Download Here](https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/)
-
 4. A text editor or IDE to review and modify YAML manifests.
 
 ---
@@ -60,6 +59,7 @@ Navigate to the corresponding folder to start the lab. Each lab folder contains:
 1. Follow the instructions in the lab’s `README.md`.
 2. Apply the provided YAML files using the `oc apply -f`
 3. Review the outcomes and analyze the results using the cluster’s dashboard or CLI tools.
+4. Utilize the Grafana instance in the cluster which is installed with predefined dashboards (access via route in `rmw-grafana` namespace)
 
 ---
 
